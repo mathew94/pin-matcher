@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pin Generator</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="pin-generator half-width">
+                    <input id="show-random" class="form-control" type="text">
+                    <button id="generate-random-btn" class="generate-btn">Generate Pin</button>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="input-section half-width">
+                    <input id="show-digit" class="form-control" type="text">
+                    <div class="numbers">
+                        <div class="calc-body">
+                            <div class="calc-button-row">
+                              <div class="button btn-digit">7</div>
+                              <div class="button btn-digit">8</div>
+                              <div class="button btn-digit">9</div>
+                            </div>
+                            <div class="calc-button-row">
+                              <div class="button btn-digit">4</div>
+                              <div class="button btn-digit">5</div>
+                              <div class="button btn-digit">6</div>
+                            </div>
+                            <div class="calc-button-row">
+                              <div id="btn-1" class="button btn-digit">1</div>
+                              <div class="button btn-digit">2</div>
+                              <div class="button btn-digit">3</div>
+                            </div>
+                            <div class="calc-button-row">
+                                <div onclick="singleClearHandler()" id="delete" class="button"><</div>
+                                <div class="button btn-digit">0</div>
+                                <div id="clearAll" class="button">C</div>
+                            </div>
+                            <div>
+                                <button id="submit" type="submit" class="submit-btn">Submit</button>
+                                <p class="action-left">3 try left</p>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="notify-section">
+            <p id="not-match" class="notify">❌ Pin Didn't Match, Please try again</p>
+            <p id="match" class="notify">✅ Pin Matched... Secret door is opening for you</p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("generate-random-btn").addEventListener("mousedown", function(){
+            for(i = 0; i < 1; i++){
+                var randomNumber = Math.floor(1000 + Math.random() * 9000);
+                var output = Math.round(randomNumber);
+                let result = document.getElementById("show-random");
+                result.value = output;
+            }
+            document.getElementById("match").style.display = 'none';
+            document.getElementById("not-match").style.display = 'none';
+        })
+        var catchBtn = document.getElementsByClassName("btn-digit");
+        for(i = 0; i < catchBtn.length; i++ ){
+           catchBtn[i].addEventListener("click",function(){
+              var catcher = parseInt(this.innerHTML);
+              var result = document.getElementById("show-digit");
+              result.value = result.value.concat(catcher);
+           })
+        }
+
+        document.getElementById("clearAll").addEventListener("click", function(){
+            var result = document.getElementById("show-digit");
+            result.value = "";
+        })
+
+        function singleClearHandler() {
+            const inputBox = document.getElementById('show-digit'),
+            deleteLastInput = inputBox.value;
+            inputBox.value = deleteLastInput.substring(0, deleteLastInput.length - 1);
+        }       
+        
+        document.getElementById("submit").addEventListener("click", function(){
+            const generateRandom = document.getElementById("show-random").value;
+            const inputBox = document.getElementById("show-digit").value;
+            if(generateRandom == 0 || inputBox == 0){
+                alert("Attention - Your Input field is empty!");
+            }
+            else if(generateRandom == inputBox){
+                document.getElementById("match").style.display = 'block';
+                document.getElementById("not-match").style.display = 'none';
+                document.getElementById('show-random').value = '';
+                document.getElementById('show-digit').value = '';
+                document.getElementById('match').style.backgroundColor = '#28a745';
+            }
+            else{
+                document.getElementById("not-match").style.display = 'block';
+                document.getElementById("match").style.display = 'none';
+                document.getElementById('show-random').value = '';
+                document.getElementById('show-digit').value = '';
+                document.getElementById('not-match').style.backgroundColor = 'red';
+            }
+        })
+    </script>
+</body>
+</html>
